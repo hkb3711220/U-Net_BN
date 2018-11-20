@@ -19,7 +19,7 @@ class U_Net(object):
         self.n_epoch = 1
         self.IMG_SIZE = 512
         self.batch_size = 1
-        self.NUM_CLASSES = 22
+        self.NUM_CLASSES = 21
 
     def Main(self, inputs, is_training):
 
@@ -75,14 +75,14 @@ class U_Net(object):
     def Train(self):
 
         images = tf.placeholder(tf.float32, shape=[self.batch_size, self.IMG_SIZE, self.IMG_SIZE, 3], name="images")
-        annotation = tf.placeholder(tf.float32, shape=[self.batch_size, self.IMG_SIZE, self.IMG_SIZE, 22], name="annotation")
+        annotation = tf.placeholder(tf.float32, shape=[self.batch_size, self.IMG_SIZE, self.IMG_SIZE, 21], name="annotation")
         is_training = tf.placeholder_with_default(False, shape=(), name='is_training')
 
         #training
         output, annotation_pred = self.Main(images, is_training)
         cost = utils.entropy_cost(logits=output, label=annotation)
         update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-        training_op = utils.training(cost
+        training_op = utils.training(cost)
 
         #Check
         accuracy = utils.accuracy(annotation, annotation_pred)
